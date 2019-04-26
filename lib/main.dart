@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
-void main() => runApp(LetSwiftChatApp());
+void main() => runApp(FlutterPubApp());
 
-class LetSwiftChatApp extends StatelessWidget {
+class FlutterPubApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(primarySwatch: Colors.orange),
+      supportedLocales: [Locale("en"), Locale("ar")],
+      localizationsDelegates: GlobalMaterialLocalizations.delegates,
       home: ChatScreen(),
     );
   }
@@ -18,92 +20,32 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
-  final _messages = <ChatMessage>[];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("LetSwift Chat"),
+        title: const Text("Flutter pub app"),
       ),
       body: Column(
         children: <Widget>[
-          Flexible(
-            child: ListView.separated(
-              itemBuilder: (BuildContext context, int index) {
-                return Dismissible(
-                  child: _messages[index],
-                  key: Key(_messages[index]._message),
-                  background: Container(
-                    color: Colors.red,
-                  ),
-                  onDismissed: (DismissDirection direction) {
-                    setState(() {
-                      _messages.removeAt(index);
-                    });
-                  },
-                );
-              },
-              itemCount: _messages.length,
-              reverse: true,
-              separatorBuilder: (BuildContext context, int index) {
-                return Divider(
-                  color: Theme.of(context).primaryColor,
-                );
-              },
+          const Align(
+            alignment: AlignmentDirectional.topStart,
+            child: Padding(
+              padding: EdgeInsetsDirectional.only(start: 20.0),
+              child: Text("Test start"),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 24.0),
-            child: TextField(
-              decoration: InputDecoration.collapsed(hintText: "Send message"),
-              onSubmitted: (String text) {
-                final animationController = AnimationController(
-                    vsync: this, duration: Duration(seconds: 1));
-                final chatMessage = ChatMessage(text, animationController);
-                setState(() {
-                  _messages.insert(0, chatMessage);
-                });
-                animationController.forward();
-              },
+          const Align(
+            alignment: AlignmentDirectional.bottomEnd,
+            child: Padding(
+              padding: EdgeInsetsDirectional.only(end: 20.0),
+              child: Text("Test end"),
             ),
-          )
+          ),
         ],
-      ),
+      )
     );
   }
 
-  @override
-  void dispose() {
-    _messages.forEach((ChatMessage chatMessage) {
-      chatMessage._animationController.dispose();
-    });
-    super.dispose();
-  }
-}
-
-class ChatMessage extends StatelessWidget {
-  final String _message;
-  final AnimationController _animationController;
-
-  ChatMessage(this._message, this._animationController);
-
-  @override
-  Widget build(BuildContext context) {
-    return SizeTransition(
-      child: Row(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: const CircleAvatar(
-              child: const Text("K"),
-            ),
-          ),
-          Text(_message),
-        ],
-      ),
-      sizeFactor:
-          CurvedAnimation(parent: _animationController, curve: Curves.easeOut),
-    );
-  }
 }

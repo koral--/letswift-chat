@@ -13,7 +13,7 @@ import 'package:letswift/main.dart';
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(LetSwiftChatApp());
+    await tester.pumpWidget(FlutterPubApp());
 
     expect(find.text('LetSwift Chat'), findsOneWidget);
   });
